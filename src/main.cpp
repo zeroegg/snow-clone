@@ -6,7 +6,7 @@ using namespace isurc;
 
 int main(int argc, char** argv) 
 {
-	ArduinoComm comm; 
+	ArduinoComm comm("/dev/ttyUSB0", 9600); 
 	ArduinoRPC rpc(comm);
 
 	rpc.setPWM(0, 1.0); 

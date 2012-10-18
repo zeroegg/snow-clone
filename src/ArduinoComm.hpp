@@ -11,6 +11,8 @@
 #include <sys/ioctl.h>
 #include <getopt.h>
 
+// note this only works in linux at the moment
+
 namespace isurc {
 
 class ArduinoComm {
@@ -32,6 +34,8 @@ public:
     int writeByte(unsigned char b);
 
     int writeBytes(unsigned char* buff, size_t len);
+
+    char readByte(); 
 
     bool isOpen() const;
 
@@ -113,7 +117,6 @@ bool ArduinoComm::isOpen() const
 {
     return fd_ == 0;
 }
-
 
 inline int ArduinoComm::writeByte(unsigned char b)
 {
