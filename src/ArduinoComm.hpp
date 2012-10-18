@@ -35,7 +35,11 @@ public:
 
     int writeBytes(unsigned char* buff, size_t len);
 
-    char readByte(); 
+    char readByte(); //TODO
+    
+    short readShort(); //TODO
+
+
 
     bool isOpen() const;
 

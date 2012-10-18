@@ -5,7 +5,10 @@
 #include "commands.h"
 
 namespace isurc {
-
+enum pinmode{
+    INPUT = 0,
+    OUTPUT = 1
+}
 class ArduinoRPC {
 public:
 
@@ -25,6 +28,8 @@ public:
     double readAnalog(int pin); 
 
     static double map(double x, double in_min, double in_max, double out_min, double out_max); 
+
+    void setpinmode(int pin,enum pinmode mode);
 
 private:
     ArduinoComm& comm_; 
@@ -72,21 +77,30 @@ inline void ArduinoRPC::setPWM(int pin, double percent)
 
 inline void ArduinoRPC::setDigital(int pin, bool b)
 {
+    comm_.writeByte(CODE_SET_DIGITAL); 
+    comm_.writeByte(pin); 
+    comm_.writeByte(b);
     // TODO
 }
 
 inline bool ArduinoRPC::readDigital(int pin)
 {
     // TODO 
-    return false; 
+    comm_.writeByte(CODE_READ_DIGITAL);
+    return comm_.readByte(); 
 }
 
 inline double ArduinoRPC::readAnalog(int pin)
 {
     // TODO 
-    return 0.0;
+    comm_.writeByte(CODE_READ_ANALOG);
+    return comm_.readShort();
 }
-
+inline void ArduinoRPC::setpinmode(int pin,enum pinmode mode)
+    {
+        comm_.writeByte(CODE_SET_PIN_MODE);
+        comm_.writeByte(mode);
+    }
 // static public
 inline double ArduinoRPC::map(double x, double in_min, double in_max, double out_min, double out_max)
 {
