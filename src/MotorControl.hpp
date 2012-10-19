@@ -12,7 +12,7 @@ public:
 
     typedef enum { LEFT = 0, RIGHT = 1, MOTOR_COUNT = 2 } Motor; 
 
-    MotorControl(ArduinoComm& comm); 
+    MotorControl(ArduinoComm& comm, int lPin, int rPin); 
 
     ~MotorControl(); 
 
@@ -30,14 +30,16 @@ private:
     char pins_[MOTOR_COUNT];
 };
 
-inline MotorControl::MotorControl(ArduinoComm& comm) : rpc_(comm)
+inline MotorControl::MotorControl(ArduinoComm& comm, int lPin, int rPin) : rpc_(comm)
 {
     rates_[LEFT] = 0.0; 
     rates_[RIGHT] = 0.0; 
     
     // TODO get from config file
-    pins_[LEFT] = 7; 
-    pins_[RIGHT] = 8; 
+    pins_[LEFT] = lPin; 
+    pins_[RIGHT] = rPin; 
+
+    // TODO josh rpc_.setPinMode(pin, OUTPUT)
 }
 
 inline MotorControl::~MotorControl() { /* do nothing */ }

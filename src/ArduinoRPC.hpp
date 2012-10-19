@@ -2,13 +2,15 @@
 #define __ISURC_ARDUINO_RPC_HPP__
 
 #include "ArduinoComm.hpp"
-#include "commands.h"
+#include "Arduino/SnowplowArduino/commands.h"
 
 namespace isurc {
-enum pinmode{
+
+enum pinmode {
     INPUT = 0,
     OUTPUT = 1
-}
+};
+
 class ArduinoRPC {
 public:
 

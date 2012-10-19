@@ -1,7 +1,7 @@
 #ifndef __ISURC_ARDUINO_COMM_LINUX_HPP__
 #define __ISURC_ARDUINO_COMM_LINUX_HPP__
 
-#include "ArduinoComm.h"
+#include "ArduinoComm.hpp"
 
 #include <stdio.h>    /* Standard input/output definitions */
 #include <stdlib.h>
@@ -29,9 +29,16 @@ public:
      */
     ArduinoCommLinux(const char* serialport, int baud);
 
-    void open(const char* serialport, int baud); 
-
     virtual ~ArduinoCommLinux();
+
+    void open(const char* serialport, int baud); // TODO throws on error
+
+    virtual int writeByte(unsigned char b);
+    virtual int writeBytes(unsigned char* buff, size_t len);
+    virtual char readByte();
+    virtual short readShort();
+    virtual bool isOpen() const;
+
 
 private:
     int fd_;
@@ -50,22 +57,25 @@ inline ArduinoCommLinux::~ArduinoCommLinux()
     close(fd_);
 }
 
-inline bool ArduinoCommLinux::open(const char* serialport, int baud)
+inline void ArduinoCommLinux::open(const char* serialport, int baud)
 {
+    // TODO throw on error
     struct termios toptions;
 
     //fd_ = open(serialport, O_RDWR | O_NOCTTY | O_NDELAY);
-    fd_ = open(serialport, O_RDWR | O_NOCTTY);
+    fd_ = ::open(serialport, O_RDWR | O_NOCTTY);
 
     if (fd_ == -1)  {
       printf("init_serialport: Unable to open port ");
       fd_ = 0;
-      return false;
+      // todo throw
+      return;
     }
     if (tcgetattr(fd_, &toptions) < 0) {
       printf("init_serialport: Couldn't get term attributes");
       fd_ = 0;
-      return false;
+      // todo throw
+      return;
     }
 
     speed_t brate = baud; // let you override switch below if needed
@@ -102,9 +112,9 @@ inline bool ArduinoCommLinux::open(const char* serialport, int baud)
     if( tcsetattr(fd_, TCSANOW, &toptions) < 0) {
         printf("init_serialport: Couldn't set term attributes");
         fd_ = 0;
-        return false;
+        // TODO throw std::exception();
+        return;
     }
-    return true;
 }
 
 bool ArduinoCommLinux::isOpen() const
@@ -121,6 +131,19 @@ inline int ArduinoCommLinux::writeBytes(unsigned char* buff, size_t len)
 {
     return write(fd_, buff, len);
 }
+
+inline char ArduinoCommLinux::readByte()
+{
+    // TODO 
+    return 0; 
+}
+
+inline short ArduinoCommLinux::readShort()
+{
+    // TODO 
+    return 0; 
+}
+
 
 }; // end namespace isurc
 
