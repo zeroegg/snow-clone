@@ -1,4 +1,8 @@
-
+//find the HSV values for different colors
+//Start by changing the S and V values to 0 - 255
+// then change the hue around until the image finds it
+// Then dial down the S and V values and you get a very
+// accurate image
 #include <opencv2\opencv.hpp>
 
 
